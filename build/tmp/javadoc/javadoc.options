@@ -1,0 +1,10 @@
+-classpath '/home/ttnd/Onslabs/networx/build/classes/main:/home/ttnd/Onslabs/networx/build/resources/main:/home/ttnd/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/retrofit/2.2.0/41e67dba73c3347e4503761642c39d0e06ca1f2/retrofit-2.2.0.jar:/home/ttnd/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/converter-gson/2.2.0/a09926806199499a20b2f5168779499abfa33342/converter-gson-2.2.0.jar:/home/ttnd/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/logging-interceptor/3.4.1/381fc1096ba65040d8e80ea43b2e1d9bad02345e/logging-interceptor-3.4.1.jar:/home/ttnd/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.6.0/69edde9fc4b01c9fd51d25b83428837478c27254/okhttp-3.6.0.jar:/home/ttnd/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/751f548c85fa49f330cecbb1875893f971b33c4e/gson-2.7.jar:/home/ttnd/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.11.0/840897fcd7223a8143f1d9b6f69714e7be34fd50/okio-1.11.0.jar'
+-d '/home/ttnd/Onslabs/networx/build/docs/javadoc'
+-doctitle 'networx API'
+-quiet 
+-windowtitle 'networx API'
+'/home/ttnd/Onslabs/networx/src/main/java/onslabs/kit/networx/RetrofitException.java'
+'/home/ttnd/Onslabs/networx/src/main/java/onslabs/kit/networx/TokenAuthenticator.java'
+'/home/ttnd/Onslabs/networx/src/main/java/onslabs/kit/networx/NetworkServiceFactory.java'
+'/home/ttnd/Onslabs/networx/src/main/java/onslabs/kit/networx/NetworkClient.java'
+'/home/ttnd/Onslabs/networx/src/main/java/onslabs/kit/networx/RetroError.java'

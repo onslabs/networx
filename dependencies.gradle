@@ -1,0 +1,10 @@
+ext {
+    retrofitVersion = '2.2.0'
+    dependencies = [
+            retrofit             : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+            retrofitConverterGson: "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+            loggingInterceptor   : "com.squareup.okhttp3:logging-interceptor:3.4.1"
+
+
+    ]
+}
