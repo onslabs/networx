@@ -22,6 +22,7 @@ dependencies {
         Map<String, String> dependencies = rootProject.ext.dependencies
         compile dependencies.retrofit
         compile dependencies.retrofitConverterGson
+        compile dependencies.retrofitConverterXml
         compile (dependencies.loggingInterceptor) {
             exclude module: 'okhttp3'
         }

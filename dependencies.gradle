@@ -3,6 +3,7 @@ ext {
     dependencies = [
             retrofit             : "com.squareup.retrofit2:retrofit:$retrofitVersion",
             retrofitConverterGson: "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+            retrofitConverterXml : "com.squareup.retrofit2:converter-simplexml:$retrofitVersion",
             loggingInterceptor   : "com.squareup.okhttp3:logging-interceptor:3.4.1"
 
 

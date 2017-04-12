@@ -20,13 +20,14 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class NetworkClient {
 
     private NetworkClient() {
     }
 
-    public static Retrofit getRestAdapter(final String baseUrl, final HashMap<String, String> requestHeaderMap) {
+    public static Retrofit getRestAdapter(final boolean isXmlConverter, final String baseUrl, final HashMap<String, String> requestHeaderMap) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -52,7 +53,7 @@ public class NetworkClient {
             public boolean shouldSkipClass(Class<?> aClass) {
                 return false;
             }
-        }).create();
+        }).setLenient().create();
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)
@@ -83,7 +84,7 @@ public class NetworkClient {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(isXmlConverter?SimpleXmlConverterFactory.create():GsonConverterFactory.create(gson))
                 .build();
     }
 
