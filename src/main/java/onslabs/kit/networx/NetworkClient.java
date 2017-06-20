@@ -1,103 +1,89 @@
-package onslabs.kit.networx;
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
 
+package onslabs.kit.networx;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
-
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.Interceptor.Chain;
+import okhttp3.OkHttpClient.Builder;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class NetworkClient {
+    private static final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
+        public Response intercept(Chain chain) throws IOException {
+            Response originalResponse = chain.proceed(chain.request());
+            int maxStale = 2419200;
+            return originalResponse.newBuilder().header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale).build();
+        }
+    };
 
     private NetworkClient() {
     }
 
-    public static Retrofit getRestAdapter(final boolean isXmlConverter, final String baseUrl, final HashMap<String, String> requestHeaderMap) {
+    public static Retrofit getRestAdapter(String baseUrl, final HashMap<String, String> requestHeaderMap) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        Gson gson = new GsonBuilder().addSerializationExclusionStrategy(new ExclusionStrategy() {
-            @Override
+        interceptor.setLevel(Level.HEADERS);
+        interceptor.setLevel(Level.BODY);
+        Gson gson = (new GsonBuilder()).addSerializationExclusionStrategy(new ExclusionStrategy() {
             public boolean shouldSkipField(FieldAttributes fieldAttributes) {
-                final Expose expose = fieldAttributes.getAnnotation(Expose.class);
+                Expose expose = (Expose)fieldAttributes.getAnnotation(Expose.class);
                 return expose != null && !expose.serialize();
             }
 
-            @Override
             public boolean shouldSkipClass(Class<?> aClass) {
                 return false;
             }
         }).addDeserializationExclusionStrategy(new ExclusionStrategy() {
-            @Override
             public boolean shouldSkipField(FieldAttributes fieldAttributes) {
-                final Expose expose = fieldAttributes.getAnnotation(Expose.class);
+                Expose expose = (Expose)fieldAttributes.getAnnotation(Expose.class);
                 return expose != null && !expose.deserialize();
             }
 
-            @Override
             public boolean shouldSkipClass(Class<?> aClass) {
                 return false;
             }
         }).setLenient().create();
+        OkHttpClient client = (new Builder()).addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR).addInterceptor(interceptor).addNetworkInterceptor(new Interceptor() {
+            public Response intercept(Chain chain) throws IOException {
+                okhttp3.Request.Builder builder = chain.request().newBuilder();
+                Set entrySet = requestHeaderMap.entrySet();
+                Iterator request = entrySet.iterator();
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)
-                .addNetworkInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request.Builder builder = chain.request().newBuilder();
-                        Set<Map.Entry<String, String>> entrySet = requestHeaderMap.entrySet();
-                        for (Map.Entry<String, String> entry : entrySet) {
-                            if (entry.getValue() != null) {
-                                if (entry.getValue().isEmpty())
-                                    builder.removeHeader(entry.getKey());
-                                else
-                                    builder.addHeader(entry.getKey(), entry.getValue());
-                            }
+                while(request.hasNext()) {
+                    Entry entry = (Entry)request.next();
+                    if(entry.getValue() != null) {
+                        if(((String)entry.getValue()).isEmpty()) {
+                            builder.removeHeader((String)entry.getKey());
+                        } else {
+                            builder.addHeader((String)entry.getKey(), (String)entry.getValue());
                         }
-
-                        Request request = builder.build();
-                        return chain.proceed(request);
                     }
+                }
 
-
-                })
-                .addNetworkInterceptor(interceptor).writeTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS)
-                .build();
-//        okHttpClient.setAuthenticator(authAuthenticator);
-
-        return new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(client)
-                .addConverterFactory(isXmlConverter?SimpleXmlConverterFactory.create():GsonConverterFactory.create(gson))
-                .build();
+                Request request1 = builder.build();
+                return chain.proceed(request1);
+            }
+        }).addNetworkInterceptor(interceptor).writeTimeout(5, TimeUnit.MINUTES).readTimeout(5, TimeUnit.MINUTES).build();
+        return (new retrofit2.Retrofit.Builder()).baseUrl(baseUrl).client(client).addConverterFactory(GsonConverterFactory.create(gson)).build();
     }
-
-    private static final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            Response originalResponse = chain.proceed(chain.request());
-            int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale
-            return originalResponse.newBuilder()
-                    .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                    .build();
-        }
-    };
 }
-
 
