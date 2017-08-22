@@ -1,11 +1,9 @@
-package onslabs.kit.networx;
+package oabs.kit.networx;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 
 import retrofit2.Callback;
 import retrofit2.Response;

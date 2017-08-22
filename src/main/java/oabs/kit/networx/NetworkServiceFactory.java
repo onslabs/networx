@@ -1,4 +1,4 @@
-package onslabs.kit.networx;
+package oabs.kit.networx;
 
 import java.io.InputStream;
 import java.util.HashMap;

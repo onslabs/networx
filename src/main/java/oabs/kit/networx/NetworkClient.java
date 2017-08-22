@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package onslabs.kit.networx;
+package oabs.kit.networx;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
