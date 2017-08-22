@@ -39,6 +39,20 @@ public abstract class CallbackManager<T>implements Callback<T> {
         return NetworkServiceFactory.getHttpsInstance(certificateInputStream,baseUrl, serviceClass, requestHeaders);
     }
 
+    public <S> S getXmlServiceClient(final boolean isHeaderUpdate, final Class<S> serviceClass) {
+        if (isHeaderUpdate) {
+            return NetworkServiceFactory.getNewXmlInstance(baseUrl,serviceClass, requestHeaders);
+        }
+        return NetworkServiceFactory.getXmlInstance(baseUrl, serviceClass, requestHeaders);
+    }
+
+    public <S> S getXmlHttpsServiceClient(final boolean isHeaderUpdate, final Class<S> serviceClass) {
+        if (isHeaderUpdate) {
+            return NetworkServiceFactory.getNewHttpsInstance(certificateInputStream,baseUrl,serviceClass, requestHeaders);
+        }
+        return NetworkServiceFactory.getXmlHttpsInstance(certificateInputStream,baseUrl, serviceClass, requestHeaders);
+    }
+
     public <S> S getServiceClient(final boolean isHeaderUpdate, final Class<S> serviceClass) {
         if (isHeaderUpdate) {
             return NetworkServiceFactory.getNewInstance(baseUrl,serviceClass, requestHeaders);

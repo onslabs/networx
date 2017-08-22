@@ -19,30 +19,59 @@ public class NetworkServiceFactory {
         mRestClient = restClient;
     }
 
-    public static <S> S getInstance(String baseUrl, Class<S> serviceClass,HashMap requestHeaderMap) {
+    public static <S> S getInstance(final String baseUrl, final Class<S> serviceClass,final HashMap requestHeaderMap) {
         if (sDataService == null) {
             sDataService = new NetworkServiceFactory(NetworkClient.getRestAdapter(baseUrl, requestHeaderMap));
         }
         return sDataService.getClient(serviceClass);
     }
 
-    public static <S> S getNewInstance(String baseUrl, Class<S> serviceClass,HashMap requestHeaderMap) {
+    public static <S> S getNewInstance(final String baseUrl, final Class<S> serviceClass,final HashMap requestHeaderMap) {
             sDataService = null;
             sDataService = new NetworkServiceFactory(NetworkClient.getRestAdapter(baseUrl, requestHeaderMap));
 
         return sDataService.getClient(serviceClass);
     }
 
-    public static <S> S getHttpsInstance(InputStream certificateInputStream, String baseUrl, Class<S> serviceClass, HashMap requestHeaderMap) {
+    public static <S> S getXmlInstance(final String baseUrl, final Class<S> serviceClass,final HashMap requestHeaderMap) {
+        if (sDataService == null) {
+            sDataService = new NetworkServiceFactory(NetworkClient.getXmlAdapter(baseUrl, requestHeaderMap));
+        }
+        return sDataService.getClient(serviceClass);
+    }
+
+    public static <S> S getNewXmlInstance(final String baseUrl, final Class<S> serviceClass,final HashMap requestHeaderMap) {
+        sDataService = null;
+        sDataService = new NetworkServiceFactory(NetworkClient.getXmlAdapter(baseUrl, requestHeaderMap));
+
+        return sDataService.getClient(serviceClass);
+    }
+
+
+    public static <S> S getHttpsInstance(final InputStream certificateInputStream, final String baseUrl, final Class<S> serviceClass, final HashMap requestHeaderMap) {
         if (sDataService == null) {
             sDataService = new NetworkServiceFactory(NetworkClient.getHttpsRestAdapter(certificateInputStream,baseUrl, requestHeaderMap));
         }
         return sDataService.getClient(serviceClass);
     }
 
-    public static <S> S getNewHttpsInstance(InputStream certificateInputStream, String baseUrl, Class<S> serviceClass, HashMap requestHeaderMap) {
+    public static <S> S getNewHttpsInstance(final InputStream certificateInputStream, final String baseUrl, final Class<S> serviceClass, final HashMap requestHeaderMap) {
         sDataService = null;
         sDataService = new NetworkServiceFactory(NetworkClient.getHttpsRestAdapter(certificateInputStream,baseUrl, requestHeaderMap));
+
+        return sDataService.getClient(serviceClass);
+    }
+
+    public static <S> S getXmlHttpsInstance(final InputStream certificateInputStream, final String baseUrl, final Class<S> serviceClass, final HashMap requestHeaderMap) {
+        if (sDataService == null) {
+            sDataService = new NetworkServiceFactory(NetworkClient.getXmlHttpsAdapter(certificateInputStream,baseUrl, requestHeaderMap));
+        }
+        return sDataService.getClient(serviceClass);
+    }
+
+    public static <S> S getNewXmlHttpsInstance(final InputStream certificateInputStream, final String baseUrl, final Class<S> serviceClass, final HashMap requestHeaderMap) {
+        sDataService = null;
+        sDataService = new NetworkServiceFactory(NetworkClient.getXmlHttpsAdapter(certificateInputStream,baseUrl, requestHeaderMap));
 
         return sDataService.getClient(serviceClass);
     }

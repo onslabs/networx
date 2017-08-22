@@ -37,6 +37,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class NetworkClient {
     private static SSLContext mSSLContext;
@@ -54,7 +55,7 @@ public class NetworkClient {
     private NetworkClient() {
     }
 
-    public static Retrofit getRestAdapter(String baseUrl, final HashMap<String, String> requestHeaderMap) {
+    public static Retrofit getRestAdapter(final String baseUrl, final HashMap<String, String> requestHeaderMap) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(Level.HEADERS);
         interceptor.setLevel(Level.BODY);
@@ -100,6 +101,67 @@ public class NetworkClient {
         }).addNetworkInterceptor(interceptor).writeTimeout(5, TimeUnit.MINUTES).readTimeout(5, TimeUnit.MINUTES).build();
         return (new retrofit2.Retrofit.Builder()).baseUrl(baseUrl).client(client).addConverterFactory(GsonConverterFactory.create(gson)).build();
     }
+
+    public static Retrofit getXmlAdapter(final String baseUrl, final HashMap<String, String> requestHeaderMap) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(Level.HEADERS);
+        interceptor.setLevel(Level.BODY);
+        OkHttpClient client = (new Builder()).addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR).addInterceptor(interceptor).addNetworkInterceptor(new Interceptor() {
+            public Response intercept(Chain chain) throws IOException {
+                okhttp3.Request.Builder builder = chain.request().newBuilder();
+                Set entrySet = requestHeaderMap.entrySet();
+                Iterator request = entrySet.iterator();
+
+                while(request.hasNext()) {
+                    Entry entry = (Entry)request.next();
+                    if(entry.getValue() != null) {
+                        if(((String)entry.getValue()).isEmpty()) {
+                            builder.removeHeader((String)entry.getKey());
+                        } else {
+                            builder.addHeader((String)entry.getKey(), (String)entry.getValue());
+                        }
+                    }
+                }
+
+                Request request1 = builder.build();
+                return chain.proceed(request1);
+            }
+        }).addNetworkInterceptor(interceptor).writeTimeout(5, TimeUnit.MINUTES).readTimeout(5, TimeUnit.MINUTES).build();
+        return (new retrofit2.Retrofit.Builder()).baseUrl(baseUrl).client(client).addConverterFactory(SimpleXmlConverterFactory.create()).build();
+    }
+
+    public static Retrofit getXmlHttpsAdapter(final InputStream inputStream, final String baseUrl, final HashMap<String, String> requestHeaderMap) {
+        if (mTrustManager == null || mSSLContext == null) {
+            createKeyStore(inputStream);
+        }
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(Level.HEADERS);
+        interceptor.setLevel(Level.BODY);
+        OkHttpClient client = (new Builder()).addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR).addInterceptor(interceptor).addNetworkInterceptor(new Interceptor() {
+            public Response intercept(Chain chain) throws IOException {
+                okhttp3.Request.Builder builder = chain.request().newBuilder();
+                Set entrySet = requestHeaderMap.entrySet();
+                Iterator request = entrySet.iterator();
+
+                while(request.hasNext()) {
+                    Entry entry = (Entry)request.next();
+                    if(entry.getValue() != null) {
+                        if(((String)entry.getValue()).isEmpty()) {
+                            builder.removeHeader((String)entry.getKey());
+                        } else {
+                            builder.addHeader((String)entry.getKey(), (String)entry.getValue());
+                        }
+                    }
+                }
+
+                Request request1 = builder.build();
+                return chain.proceed(request1);
+            }
+        }).addNetworkInterceptor(interceptor).writeTimeout(5, TimeUnit.MINUTES).readTimeout(5, TimeUnit.MINUTES).build();
+        return (new retrofit2.Retrofit.Builder()).baseUrl(baseUrl).client(client).addConverterFactory(SimpleXmlConverterFactory.create()).build();
+    }
+
 
     private static void createKeyStore(InputStream certificateInputStream) {
 
