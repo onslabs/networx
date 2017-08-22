@@ -3,6 +3,7 @@
 -doctitle 'networx API'
 -quiet 
 -windowtitle 'networx API'
+'/Users/jitendra/AndroidStudioProjects/HDFC Investor App/networx/src/main/java/onslabs/kit/networx/CallbackManager.java'
 '/Users/jitendra/AndroidStudioProjects/HDFC Investor App/networx/src/main/java/onslabs/kit/networx/NetworkClient.java'
 '/Users/jitendra/AndroidStudioProjects/HDFC Investor App/networx/src/main/java/onslabs/kit/networx/NetworkServiceFactory.java'
 '/Users/jitendra/AndroidStudioProjects/HDFC Investor App/networx/src/main/java/onslabs/kit/networx/RetroError.java'
