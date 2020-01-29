@@ -1,5 +1,5 @@
 ext {
-    retrofitVersion = '2.2.0'
+    retrofitVersion = '2.7.1'
     dependencies = [
             retrofit             : "com.squareup.retrofit2:retrofit:$retrofitVersion",
             retrofitConverterGson: "com.squareup.retrofit2:converter-gson:$retrofitVersion",
